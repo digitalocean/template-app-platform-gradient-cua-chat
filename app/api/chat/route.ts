@@ -46,12 +46,14 @@ export async function POST(req: Request) {
     const baseTransport = new StreamableHTTPClientTransport(url, {});
     const transport = new PingAwareTransportWrapper(baseTransport);
 
-    const [client, body] = await Promise.all([
+    const [mcpClient, body] = await Promise.all([
         experimental_createMCPClient({
             transport,
             async onUncaughtError(error) {
                 console.error('Uncaught error in MCP client:', error);
-                await client.close();
+                if (mcpClient) {
+                    await mcpClient.close();
+                }
             },
         }),
         req.json(),
@@ -63,7 +65,7 @@ export async function POST(req: Request) {
 
     try {
         // Get MCP tools directly - they're already in the correct format for AI SDK
-        const mcpTools = await client.tools();
+        const mcpTools = await mcpClient.tools();
 
         // Wrap MCP tools to intercept and process base64 data
         const wrappedMcpTools: Record<string, unknown> = {};
@@ -187,7 +189,7 @@ export async function POST(req: Request) {
         }
     } catch (error) {
         console.error('Chat API error caught in catch block:', error);
-        client.close();
+        mcpClient.close();
 
         // Extract detailed error message if available
         let errorMessage = 'An error occurred';

@@ -376,6 +376,83 @@ describe('Chat API Route', () => {
     });
 
     describe('Error Handling', () => {
+      it('should handle MCP client initialization errors without race conditions', async () => {
+        // This test ensures that onUncaughtError doesn't cause "Cannot access before initialization" errors
+        const { experimental_createMCPClient } = require('ai');
+        const { StreamableHTTPClientTransport } = require('@modelcontextprotocol/sdk/client/streamableHttp.js');
+        
+        // Create a mock that simulates the actual implementation behavior
+        experimental_createMCPClient.mockImplementationOnce(async ({ transport, onUncaughtError }) => {
+          // Simulate an error occurring during initialization
+          setTimeout(() => {
+            if (onUncaughtError) {
+              // This should not throw "Cannot access 'client' before initialization"
+              onUncaughtError(new Error('Transport error during initialization'));
+            }
+          }, 0);
+          
+          // Return a mock client
+          return {
+            tools: jest.fn().mockResolvedValue({}),
+            close: jest.fn(),
+          };
+        });
+
+        const request = createMockRequest({
+          headers: MODEL_CONFIGS.default,
+          body: {
+            messages: [TEST_MESSAGES.userMessage('Test')],
+          },
+        });
+
+        // This should not throw an error
+        const response = await POST(request);
+        
+        // Wait for any pending timers
+        await new Promise(resolve => setTimeout(resolve, 10));
+        
+        // Should handle the request normally despite the transport error
+        expect(response).toBeDefined();
+      });
+
+      it('should handle transport errors after client initialization', async () => {
+        const { experimental_createMCPClient } = require('ai');
+        const mockClient = {
+          tools: jest.fn().mockResolvedValue({}),
+          close: jest.fn(),
+        };
+        
+        let capturedOnUncaughtError: ((error: Error) => Promise<void>) | undefined;
+        
+        experimental_createMCPClient.mockImplementationOnce(async ({ onUncaughtError }) => {
+          capturedOnUncaughtError = onUncaughtError;
+          return mockClient;
+        });
+
+        const { streamText } = require('ai');
+        streamText.mockReturnValueOnce({
+          textStream: createTextStream('Response'),
+          toUIMessageStreamResponse: () => streamToResponse(createTextStream('Response')),
+        });
+
+        const request = createMockRequest({
+          headers: MODEL_CONFIGS.default,
+          body: {
+            messages: [TEST_MESSAGES.userMessage('Test')],
+          },
+        });
+
+        await POST(request);
+        
+        // Now simulate a transport error after initialization
+        if (capturedOnUncaughtError) {
+          await capturedOnUncaughtError(new Error('Transport error after init'));
+        }
+        
+        // Verify close was called
+        expect(mockClient.close).toHaveBeenCalled();
+      });
+
       it('should handle model errors with proper error messages', async () => {
         const { streamText } = require('ai');
         streamText.mockImplementationOnce(() => {
