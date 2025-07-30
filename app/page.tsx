@@ -4,16 +4,7 @@ import {
   ChatBubbleLeftRightIcon,
 } from "@heroicons/react/24/outline";
 
-async function getConfig() {
-  "use server";
-  return {
-    playwrightServer: process.env.PLAYWRIGHT_SERVER_ENDPOINT || "<unset>",
-    playwrightMcp: process.env.PLAYWRIGHT_MCP_ENDPOINT || "<unset>",
-  };
-}
-
-export default async function Home() {
-  const config = await getConfig();
+export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -81,29 +72,6 @@ export default async function Home() {
               </div>
             </div>
           </Link>
-        </div>
-
-        {/* Additional Info */}
-        <div className="mt-16 text-center">
-          <div className="bg-blue-50 rounded-lg p-6 max-w-2xl mx-auto">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Endpoint Configuration
-            </h3>
-            <div className="text-sm text-gray-600 space-y-1">
-              <p>
-                Playwright Instance:{" "}
-                <code className="bg-white px-2 py-1 rounded">
-                  {config.playwrightServer}
-                </code>
-              </p>
-              <p>
-                MCP Server:{" "}
-                <code className="bg-white px-2 py-1 rounded">
-                  {config.playwrightMcp}
-                </code>
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
