@@ -131,7 +131,12 @@ export async function POST(req: Request) {
                 maxRetries: 5,
             });
 
-            const response = result.toUIMessageStreamResponse({});
+            const response = result.toUIMessageStreamResponse({
+                headers: {
+                    'Transfer-Encoding': 'chunked',
+                    Connection: 'keep-alive',
+                },
+            });
 
             return response;
         } catch (streamError) {
