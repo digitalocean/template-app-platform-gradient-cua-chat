@@ -58,3 +58,5 @@ dmypy.json
 /.coverage
 *.log
 .sshots/
+files/
+!files/.gitkeep
