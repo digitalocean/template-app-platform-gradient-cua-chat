@@ -7,10 +7,8 @@ import {
 async function getConfig() {
   "use server";
   return {
-    playwrightServer:
-      process.env.PLAYWRIGHT_SERVER_ENDPOINT || "http://localhost:8081",
-    playwrightMcp:
-      process.env.PLAYWRIGHT_MCP_ENDPOINT || "http://localhost:8080/mcp",
+    playwrightServer: process.env.PLAYWRIGHT_SERVER_ENDPOINT || "<unset>",
+    playwrightMcp: process.env.PLAYWRIGHT_MCP_ENDPOINT || "<unset>",
   };
 }
 
@@ -89,7 +87,7 @@ export default async function Home() {
         <div className="mt-16 text-center">
           <div className="bg-blue-50 rounded-lg p-6 max-w-2xl mx-auto">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Demo Configuration
+              Endpoint Configuration
             </h3>
             <div className="text-sm text-gray-600 space-y-1">
               <p>
