@@ -4,7 +4,7 @@
 
 A Next.js application demonstrating DigitalOcean's AI platform capabilities, featuring:
 
-- **Gradient AI Integration**: Chat with multiple LLM models powered by DigitalOcean's Gradient AI platform
+- **Gradient Integration**: Chat with multiple LLM models powered by DigitalOcean's Gradient platform
 - **Playwright Browser Automation**: Remote browser control through MCP (Model Context Protocol)
 - **DigitalOcean Spaces**: Automatic file upload and optimization for media content
 - **Interactive Web Tools**: Screenshot capture and browser automation capabilities
@@ -15,7 +15,7 @@ A Next.js application demonstrating DigitalOcean's AI platform capabilities, fea
 
 #### 1. AI Chat with MCP Browser Automation
 
-- **Multi-Model Support**: Access to various LLMs through DigitalOcean's Gradient AI (requires models with tool support - see Limitations section)
+- **Multi-Model Support**: Access to various LLMs through DigitalOcean's Gradient (requires models with tool support - see Limitations section)
 - **Browser Control**: AI can navigate websites, take screenshots, fill forms, and interact with web pages (OpenAI models recommended)
 - **Visual AI**: Support for vision capabilities - AI can see and understand screenshots
 - **PDF Processing**: AI can read and process PDF documents
@@ -90,7 +90,7 @@ A Next.js application demonstrating DigitalOcean's AI platform capabilities, fea
 
 ### Model Requirements
 
-The chat interface with browser automation requires LLM models that support **function calling/tools**. Not all models available through Gradient AI support this feature.
+The chat interface with browser automation requires LLM models that support **function calling/tools**. Not all models available through Gradient support this feature.
 
 #### Supported Models
 
@@ -112,7 +112,7 @@ The following models have been tested and confirmed to work with browser automat
 
 The following models have limitations with browser automation in this demo:
 
-- **Anthropic Claude models** (Claude 3 Opus, Sonnet, Haiku) - While these models do support tools, the current implementation uses the [AI SDK's OpenAI-compatible provider](https://v5.ai-sdk.dev/providers/openai-compatible-providers#openai-compatible-providers) which doesn't properly support tool calling for Anthropic models through Gradient AI
+- **Anthropic Claude models** (Claude 3 Opus, Sonnet, Haiku) - While these models do support tools, the current implementation uses the [AI SDK's OpenAI-compatible provider](https://v5.ai-sdk.dev/providers/openai-compatible-providers#openai-compatible-providers) which doesn't properly support tool calling for Anthropic models through Gradient
 - Most open-source models without function calling support
 - Text-only models without tool capabilities
 
@@ -126,11 +126,11 @@ The following models have limitations with browser automation in this demo:
 
 ### Technical Notes
 
-- This demo uses the [AI SDK](https://sdk.vercel.ai/) with an OpenAI-compatible provider to communicate with Gradient AI
+- This demo uses the [AI SDK](https://sdk.vercel.ai/) with an OpenAI-compatible provider to communicate with Gradient
 - Tool calling implementation follows OpenAI's function calling format
 - The [Playwright MCP server](https://github.com/microsoft/playwright-mcp) supports sessions for maintaining browser state across requests, but the [AI SDK doesn't yet support MCP session management](https://v5.ai-sdk.dev/docs/ai-sdk-core/tools-and-tool-calling#mcp-tools)
 - Future updates may add:
-  - Native support for Anthropic models once the AI SDK's provider properly supports their tool format through Gradient AI
+  - Native support for Anthropic models once the AI SDK's provider properly supports their tool format through Gradient
   - Session support once the AI SDK implements MCP session management
 
 ## DigitalOcean Spaces Integration
@@ -248,7 +248,7 @@ The application requires several environment variables for different services. C
 NEXT_PUBLIC_BASE_URL="http://localhost:3000"
 ```
 
-### Gradient AI Configuration
+### Gradient Configuration
 
 [Gradient](https://docs.digitalocean.com/products/gradientai-platform/) is DigitalOcean's AI platform for running LLMs.
 
@@ -358,7 +358,7 @@ Configure these environment variables in the App Platform settings (see Environm
 
 **Required Secrets:**
 
-- `GRADIENT_API_KEY` - Your Gradient AI API key
+- `GRADIENT_API_KEY` - Your Gradient API key
 - `DO_SPACES_ACCESS_KEY` - Your Spaces access key
 - `DO_SPACES_SECRET_KEY` - Your Spaces secret key
 - `DO_SPACES_BUCKET` - Your Spaces bucket name
@@ -434,7 +434,7 @@ Monthly costs (approximate):
 
 Plus:
 
-- Gradient AI usage (pay per token)
+- Gradient usage (pay per token)
 - Spaces storage and bandwidth
 
 ### Troubleshooting Deployment
@@ -547,7 +547,7 @@ Run `yarn test:coverage` to see the full coverage report.
 
 3. **"Gradient API error"**
    - Verify your API key is correct
-   - Check you have access to Gradient AI
+   - Check you have access to Gradient
    - Ensure you're not exceeding rate limits
 
 4. **"Spaces upload failed"**

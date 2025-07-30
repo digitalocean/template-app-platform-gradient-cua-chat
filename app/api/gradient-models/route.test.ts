@@ -129,7 +129,7 @@ describe('GET /api/gradient-models', () => {
       const data = await response.json();
 
       expect(response.status).toBe(500);
-      expect(data.error).toBe('Gradient AI API key not configured');
+      expect(data.error).toBe('Gradient API key not configured');
     });
 
     it('should handle fetch errors', async () => {

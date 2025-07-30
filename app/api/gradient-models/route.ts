@@ -85,12 +85,12 @@ export const GET = async () => {
     if (!gradientApiKey) {
       logger.error('GRADIENT_API_KEY not configured');
       return NextResponse.json(
-        { error: 'Gradient AI API key not configured' },
+        { error: 'Gradient API key not configured' },
         { status: 500 }
       );
     }
 
-    logger.info('Fetching models from Gradient AI');
+    logger.info('Fetching models from Gradient');
 
     const response = await fetch('https://inference.do-ai.run/v1/models', {
       headers: {
@@ -104,7 +104,7 @@ export const GET = async () => {
     }
 
     const data = await response.json();
-    logger.info(`Fetched ${data.data?.length || 0} models from Gradient AI`);
+    logger.info(`Fetched ${data.data?.length || 0} models from Gradient`);
     // Transform the response to match expected format
     const models = data.data?.map((model: GradientModel) => ({
       id: model.id,
