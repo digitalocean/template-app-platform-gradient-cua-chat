@@ -1,0 +1,25 @@
+services:
+  playwright:
+    container_name: playwright-server
+    build:
+      context: .
+      dockerfile: Dockerfile.playwright
+      args:
+        PLAYWRIGHT_VERSION: ${PLAYWRIGHT_VERSION:-1.54.1}
+        NODE_TAG: ${NODE_TAG:-noble}
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+
+  mcp:
+    container_name: mcp-server
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+      args:
+        PLAYWRIGHT_MCP_VERSION: ${PLAYWRIGHT_MCP_VERSION:-0.0.32}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./files:/app/files
+    restart: unless-stopped
