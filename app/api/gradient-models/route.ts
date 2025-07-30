@@ -55,7 +55,7 @@ function getMaxTokensForModel(modelId: string): number {
 
     // Mistral models
     case 'mistral-nemo-instruct-2407':
-      return 128000;
+      return 130072;
 
     // OpenAI models
     case 'openai-gpt-4.1':

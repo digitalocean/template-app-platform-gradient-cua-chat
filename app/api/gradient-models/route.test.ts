@@ -42,7 +42,7 @@ describe('GET /api/gradient-models', () => {
       const data = await response.json();
 
       expect(data.models).toHaveLength(4);
-      
+
       // Check specific models have correct max tokens
       expect(data.models[0]).toEqual({
         id: 'models/openai-gpt-4.1',
@@ -68,7 +68,7 @@ describe('GET /api/gradient-models', () => {
         object: 'model',
         created: 1234567890,
         owned_by: 'mistral',
-        maxTokens: 128000,
+        maxTokens: 130072,
       });
 
       // Unknown model should get default max tokens
@@ -160,7 +160,7 @@ describe('GET /api/gradient-models', () => {
     const testCases = [
       // Alibaba models
       { modelId: 'alibaba-qwen3-32b', expectedTokens: 32768 },
-      
+
       // Anthropic models
       { modelId: 'anthropic-claude-3-opus', expectedTokens: 4096 },
       { modelId: 'anthropic-claude-3.5-haiku', expectedTokens: 100000 },
@@ -168,24 +168,24 @@ describe('GET /api/gradient-models', () => {
       { modelId: 'anthropic-claude-3.7-sonnet', expectedTokens: 64000 },
       { modelId: 'anthropic-claude-opus-4', expectedTokens: 32000 },
       { modelId: 'anthropic-claude-sonnet-4', expectedTokens: 64000 },
-      
+
       // DeepSeek models
       { modelId: 'deepseek-r1-distill-llama-70b', expectedTokens: 8192 },
-      
+
       // Llama models
       { modelId: 'llama3-8b-instruct', expectedTokens: 8192 },
       { modelId: 'llama3.3-70b-instruct', expectedTokens: 8192 },
-      
+
       // Mistral models
-      { modelId: 'mistral-nemo-instruct-2407', expectedTokens: 128000 },
-      
+      { modelId: 'mistral-nemo-instruct-2407', expectedTokens: 130072 },
+
       // OpenAI models
       { modelId: 'openai-gpt-4.1', expectedTokens: 32768 },
       { modelId: 'openai-gpt-4o', expectedTokens: 100000 },
       { modelId: 'openai-gpt-4o-mini', expectedTokens: 16384 },
       { modelId: 'openai-o3', expectedTokens: 100000 },
       { modelId: 'openai-o3-mini', expectedTokens: 128000 },
-      
+
       // Unknown model (default)
       { modelId: 'unknown-model-xyz', expectedTokens: 32000 },
     ];
