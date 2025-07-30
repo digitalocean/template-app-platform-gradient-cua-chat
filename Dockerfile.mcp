@@ -1,0 +1,21 @@
+# See https://mcr.microsoft.com/en-us/catalog?search=playwright for tags
+ARG PLAYWRIGHT_MCP_VERSION=0.0.32
+
+FROM mcr.microsoft.com/playwright/mcp:v${PLAYWRIGHT_MCP_VERSION}
+
+USER root
+
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
+RUN npx -y playwright-core install --with-deps chromium firefox msedge webkit chromium-headless-shell 
+
+WORKDIR /app
+
+# Copy config file
+COPY --chown=root:root playwright-config.json ./config.json
+RUN mkdir files && chmod -R 777 .
+# Expose MCP port
+EXPOSE 8080
+
+# Start MCP server with local browser
+ENTRYPOINT [  "/bin/bash", "-c","echo '{}' > /app/files/sessions.json && node cli.js --config /app/config.json --host 0.0.0.0 --port 8080  --isolated --vision --no-sandbox --caps vision,pdf  --storage-state /app/files/sessions.json --browser chromium,firefox,msedge,webkit" ]

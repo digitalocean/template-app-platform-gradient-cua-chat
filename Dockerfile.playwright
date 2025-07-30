@@ -1,0 +1,15 @@
+# See https://mcr.microsoft.com/en-us/catalog?search=playwright for tags
+ARG PLAYWRIGHT_VERSION=1.54.1
+
+FROM mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}
+
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
+# Install playwright browsers and dependencies
+RUN npx --yes playwright-core install --with-deps chromium firefox msedge webkit
+
+RUN chmod -R 777 /ms-playwright
+# Expose WebSocket port
+EXPOSE 8081
+# Start Playwright server
+CMD ["/bin/sh","-c","npx -y playwright run-server --port 8081 --host 0.0.0.0"]

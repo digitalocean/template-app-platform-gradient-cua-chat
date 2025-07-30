@@ -1,0 +1,20 @@
+{
+    "browser": {
+        "browserName": "chromium",
+        "launchOptions": {
+            "channel": "msedge"
+        },
+        "contextOptions": {
+            "recordVideo": {
+                "dir": "/app/files"
+            }
+        }
+    },
+    "capabilities": [
+        "core",
+        "pdf",
+        "vision"
+    ],
+    "outputDir": "/app/files",
+    "imageResponses": "allow"
+}

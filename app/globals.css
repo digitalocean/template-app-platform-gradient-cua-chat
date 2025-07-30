@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f5f8fa;
+  --foreground: #333333;
+  --primary: #0070f3;
+  --secondary: #1c1c1c;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Override underline for card links */
+a.no-underline,
+a.no-underline:hover,
+a.no-underline:focus {
+  text-decoration: none !important;
+}
+
+/* Ensure no underlines in card content */
+.no-underline *,
+.no-underline *:hover {
+  text-decoration: none !important;
+}
+
+/* Mermaid diagram styles */
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.white-svg {
+  filter: brightness(0) invert(1);
+}
+
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden; /* We'll handle scrolling in our main area */
+}
+
+/* Global cursor styles for interactive elements */
+button:not(:disabled),
+a,
+[role="button"],
+[onclick],
+input[type="checkbox"],
+input[type="radio"],
+select,
+.clickable,
+.cursor-pointer {
+  cursor: pointer;
+}
+
+button:disabled,
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+/* Ensure interactive icons show pointer cursor */
+svg[onclick],
+[class*="Icon"][onclick] {
+  cursor: pointer;
+}
+
+/* Table sortable headers */
+th[onclick],
+th > button,
+th > div[onclick] {
+  cursor: pointer;
+}
+
+/* Dropdown triggers */
+[aria-haspopup="true"],
+[aria-expanded] {
+  cursor: pointer;
+}
