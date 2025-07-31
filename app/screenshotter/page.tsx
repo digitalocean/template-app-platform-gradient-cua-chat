@@ -109,7 +109,15 @@ export default function ScreenshotterPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Failed to take screenshot");
+        // Construct a detailed error message including all available information
+        let errorMessage = data.error || "Failed to take screenshot";
+        if (data.details) {
+          errorMessage += `\n\nDetails: ${data.details}`;
+        }
+        if (data.code) {
+          errorMessage += `\n\nError Code: ${data.code}`;
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -189,36 +197,8 @@ export default function ScreenshotterPage() {
                 </button>
               </div>
               {error && (
-                <div className="mt-2">
-                  {(() => {
-                    // Check if the error contains JSON
-                    try {
-                      // Try to parse as JSON first
-                      const parsed = JSON.parse(error);
-                      return (
-                        <pre className="bg-gray-900 text-gray-100 rounded p-3 overflow-x-auto text-xs">
-                          <code>{JSON.stringify(parsed, null, 2)}</code>
-                        </pre>
-                      );
-                    } catch {
-                      // If not JSON, check if it looks like a code/technical error
-                      if (
-                        error.includes("{") ||
-                        error.includes("Error:") ||
-                        error.length > 100
-                      ) {
-                        return (
-                          <pre className="bg-gray-900 text-gray-100 rounded p-3 overflow-x-auto text-xs">
-                            <code>{error}</code>
-                          </pre>
-                        );
-                      }
-                      // Otherwise, display as regular text
-                      return (
-                        <div className="text-sm text-red-600">{error}</div>
-                      );
-                    }
-                  })()}
+                <div className="mt-2 bg-red-50 border border-red-200 rounded-lg p-3">
+                  <div className="text-sm text-red-700 whitespace-pre-wrap">{error}</div>
                 </div>
               )}
             </div>

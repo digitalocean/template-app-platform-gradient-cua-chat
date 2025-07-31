@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
         chromium;
 
     try {
-      console.log(`Connecting to Playwright server at ${playwrightEndpoint} for browser: ${browserType}`);
+      console.log(`Connecting to Playwright server for browser: ${browserType}`);
       const browserSpecificOptions = {
         channel: browserType === 'msedge' ? 'msedge' :
           browserType === 'chrome' ? 'chrome' :
@@ -84,15 +84,13 @@ export async function POST(request: NextRequest) {
         ...browserSpecificOptions
       });
     } catch (connectError) {
-      console.error('Failed to connect to Playwright server:', connectError);
+      // Log only essential information for debugging
+      console.error('Browser connection failed:', browserType, connectError instanceof Error ? connectError.message : 'Unknown error');
       return NextResponse.json(
         {
           error: 'Browser connection failed',
-          details: `Unable to connect to the Playwright server at ${playwrightEndpoint}. The server is returning: "${connectError instanceof Error ? connectError.message : String(connectError)}". Please ensure a Playwright WebSocket server is running.`,
-          code: 'CONNECTION_FAILED',
-          endpoint: playwrightEndpoint,
-          browserType: browserType,
-          hint: 'The server should be started with: npx playwright run-server --port 8081'
+          details: 'Unable to connect to the browser service. Please try again later.',
+          code: 'CONNECTION_FAILED'
         },
         { status: 503 }
       );
