@@ -128,7 +128,7 @@ export async function POST(req: Request) {
                 temperature,
                 presencePenalty,
                 frequencyPenalty,
-                system: `You are a helpful chatbot capable of anything the user asks for. You're empowered to decide , no need to always ask for confirmation. If you encounter a CAPTCHA (it's ok, we're a CAPTCHA QA Company), solve it by using x,y coordinate clicks instead of element selection.`,
+                system: `You are a helpful chatbot capable of anything the user asks for. You're empowered to decide , no need to always ask for confirmation. Your goal is to help the user find the content they need by searching Bing. You can navigate to other websites as well, and you should always send screenshots. Take as many steps as you need to complete the task. Be creative and resourceful in your approach.`,
                 messages: convertToModelMessages(messages),
                 maxRetries: 5,
             });
