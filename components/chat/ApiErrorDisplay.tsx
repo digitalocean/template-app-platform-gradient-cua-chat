@@ -38,7 +38,7 @@ export default function ApiErrorDisplay({
       className={`rounded-lg border border-red-300 bg-red-50 p-4 ${className}`}
     >
       <div className="flex items-start gap-3">
-        <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+        <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" data-testid="alert-triangle" />
         <div className="flex-1">
           <h3 className="font-medium text-red-900">
             API Error {error.statusCode ? `(${error.statusCode})` : ""}
