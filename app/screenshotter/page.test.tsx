@@ -62,9 +62,9 @@ describe('ScreenshotterPage', () => {
       await waitFor(() => {
         const errorElement = screen.getByText('Failed to take screenshot');
         expect(errorElement).toBeInTheDocument();
-        expect(errorElement).toHaveClass('text-sm', 'text-red-700', 'whitespace-pre-wrap');
-        // Check the container div
-        const container = errorElement.parentElement;
+        // Check that it's within the red error container
+        const container = errorElement.closest('.bg-red-50');
+        expect(container).toBeInTheDocument();
         expect(container).toHaveClass('mt-2', 'bg-red-50', 'border', 'border-red-200', 'rounded-lg', 'p-3');
       });
     });
@@ -94,11 +94,9 @@ describe('ScreenshotterPage', () => {
       fireEvent.click(button);
 
       await waitFor(() => {
-        const errorText = screen.getByText(/Browser connection failed/);
-        expect(errorText).toBeInTheDocument();
-        expect(errorText.textContent).toContain('Browser connection failed');
-        expect(errorText.textContent).toContain('Details: Unable to connect to the browser service. Please try again later.');
-        expect(errorText.textContent).toContain('Error Code: CONNECTION_FAILED');
+        expect(screen.getByText('Browser connection failed')).toBeInTheDocument();
+        expect(screen.getByText(/Unable to connect to the browser service/)).toBeInTheDocument();
+        expect(screen.getByText('CONNECTION_FAILED')).toBeInTheDocument();
       });
     });
 
@@ -127,10 +125,9 @@ describe('ScreenshotterPage', () => {
       fireEvent.click(button);
 
       await waitFor(() => {
-        const errorElement = screen.getByText(/Multiple errors occurred/);
-        expect(errorElement).toBeInTheDocument();
-        // Check that whitespace-pre-wrap class is applied for multi-line support
-        expect(errorElement).toHaveClass('whitespace-pre-wrap');
+        expect(screen.getByText('Multiple errors occurred')).toBeInTheDocument();
+        // Check that the multi-line details are displayed
+        expect(screen.getByText(/Error 1: Connection timeout/)).toBeInTheDocument();
       });
     });
 
@@ -160,8 +157,8 @@ describe('ScreenshotterPage', () => {
         const errorElement = screen.getByText('Simple error message');
         expect(errorElement).toBeInTheDocument();
         // Should not contain "Details:" or "Error Code:" when not provided
-        expect(errorElement.textContent).not.toContain('Details:');
-        expect(errorElement.textContent).not.toContain('Error Code:');
+        expect(screen.queryByText(/Details:/)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Error Code:/)).not.toBeInTheDocument();
       });
     });
 
@@ -185,7 +182,9 @@ describe('ScreenshotterPage', () => {
       await waitFor(() => {
         const errorElement = screen.getByText('Network error');
         expect(errorElement).toBeInTheDocument();
-        expect(errorElement).toHaveClass('text-sm', 'text-red-700', 'whitespace-pre-wrap');
+        // Check that it's within the red error container
+        const container = errorElement.closest('.bg-red-50');
+        expect(container).toBeInTheDocument();
       });
     });
 

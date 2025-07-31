@@ -43,7 +43,7 @@ export default function ScreenshotterPage() {
   const [fullPage, setFullPage] = useState(false);
   const [highQuality, setHighQuality] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ error?: string; details?: string; code?: string } | null>(null);
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [showLightbox, setShowLightbox] = useState(false);
 
@@ -71,7 +71,7 @@ export default function ScreenshotterPage() {
 
   const handleScreenshot = async () => {
     if (!url) {
-      setError("Please enter a URL");
+      setError({ error: "Please enter a URL" });
       return;
     }
 
@@ -79,7 +79,7 @@ export default function ScreenshotterPage() {
     try {
       new URL(url);
     } catch {
-      setError("Please enter a valid URL");
+      setError({ error: "Please enter a valid URL" });
       return;
     }
 
@@ -109,23 +109,19 @@ export default function ScreenshotterPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        // Construct a detailed error message including all available information
-        let errorMessage = data.error || "Failed to take screenshot";
-        if (data.details) {
-          errorMessage += `\n\nDetails: ${data.details}`;
-        }
-        if (data.code) {
-          errorMessage += `\n\nError Code: ${data.code}`;
-        }
-        throw new Error(errorMessage);
+        throw data;
       }
 
       const data = await response.json();
       setScreenshot(data.screenshot);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unexpected error occurred"
-      );
+      if (err && typeof err === 'object' && 'error' in err) {
+        setError(err as { error?: string; details?: string; code?: string });
+      } else if (err instanceof Error) {
+        setError({ error: err.message });
+      } else {
+        setError({ error: "An unexpected error occurred" });
+      }
     } finally {
       setLoading(false);
     }
@@ -198,7 +194,19 @@ export default function ScreenshotterPage() {
               </div>
               {error && (
                 <div className="mt-2 bg-red-50 border border-red-200 rounded-lg p-3">
-                  <div className="text-sm text-red-700 whitespace-pre-wrap">{error}</div>
+                  <div className="text-sm text-red-700">
+                    <div>{error.error || "Failed to take screenshot"}</div>
+                    {error.details && (
+                      <div className="mt-2">
+                        <strong>Details:</strong> {error.details}
+                      </div>
+                    )}
+                    {error.code && (
+                      <div className="mt-1">
+                        <strong>Error Code:</strong> {error.code}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
