@@ -1,4 +1,4 @@
-# DigitalOcean Playwright MCP CUA Demo
+# DigitalOcean Gradient + Playwright MCP CUA Template
 
 [![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/digitalocean/template-app-platform-gradient-cua-chat/tree/main)
 
@@ -39,7 +39,6 @@ A Next.js application demonstrating DigitalOcean's AI platform capabilities, fea
 - **Message Styling**:
   - User messages: Blue background (#3b82f6)
   - Assistant messages: Green background (#22c55e)
-  - Tool results: Gray background with proper formatting
 - **Collapsible Content**: Large outputs automatically collapse with expand/collapse controls
 
 #### Advanced Features
@@ -51,14 +50,13 @@ A Next.js application demonstrating DigitalOcean's AI platform capabilities, fea
 
 ### Technical Features
 
-- **Automatic File Upload**: Base64 content automatically uploaded to DigitalOcean Spaces
-- **Token Optimization**: Replace large base64 strings with presigned URLs
+- **Token Optimization**: Replace large base64 strings with presigned URLs,  automatically uploaded to DigitalOcean Spaces
 - **Concurrent Processing**: Batch uploads with concurrency limits for performance
 - **MCP Protocol Support**: Full implementation of Model Context Protocol for tool integration
-- **WebSocket Transport**: Real-time communication with MCP servers
+- **Streamable HTTP Transport**: Real-time communication with MCP servers
 - **Keyboard Shortcuts**:
-  - `Ctrl+K` / `Cmd+K`: Clear chat and start new conversation
-  - OS-aware shortcut display (shows ⌘ on Mac, Ctrl on others)
+  - OS-aware shortcut display (shows ⌘ on Mac, Ctrl on others): Clear chat and start new conversation
+  -
 
 ## Architecture
 
@@ -98,9 +96,9 @@ The following models have been tested and confirmed to work with browser automat
 
 | Model ID | Provider | Description | Performance |
 |----------|----------|-------------|-------------|
-| `gpt-4o` | OpenAI | GPT-4 Optimized | Best overall performance |
-| `gpt-4o-mini` | OpenAI | GPT-4 Optimized Mini | Cost-effective, fast |
-| `gpt-4-turbo` | OpenAI | GPT-4 Turbo | High quality |
+| `openai-gpt-41` | OpenAI | GPT-4 Optimized | Best overall performance |
+| `openai-gpt-4o` | OpenAI | GPT-4 Optimized | Better than mini, but not as good as 41 |
+| `openai-gpt-4o-mini` | OpenAI | GPT-4 Optimized Mini | Cost-effective, fast |
 | `alibaba-qwen3-32b` | Alibaba | Qwen 3 32B | Excellent open model |
 | `deepseek-r1-distill-llama-70b` | DeepSeek | R1 Distilled Llama 70B | Powerful open model |
 | `llama3.3-70b-instruct` | Meta | Llama 3.3 70B Instruct | High-quality open model |
@@ -110,7 +108,7 @@ The following models have been tested and confirmed to work with browser automat
 
 #### Currently Unsupported Models
 
-The following models have limitations with browser automation in this demo:
+The following models have limitations with browser automation in this template:
 
 - **Anthropic Claude models** (Claude 3 Opus, Sonnet, Haiku) - While these models do support tools, the current implementation uses the [AI SDK's OpenAI-compatible provider](https://v5.ai-sdk.dev/providers/openai-compatible-providers#openai-compatible-providers) which doesn't properly support tool calling for Anthropic models through Gradient
 - Most open-source models without function calling support
@@ -126,7 +124,7 @@ The following models have limitations with browser automation in this demo:
 
 ### Technical Notes
 
-- This demo uses the [AI SDK](https://sdk.vercel.ai/) with an OpenAI-compatible provider to communicate with Gradient
+- This template uses the [AI SDK](https://sdk.vercel.ai/) with an OpenAI-compatible provider to communicate with Gradient
 - Tool calling implementation follows OpenAI's function calling format
 - The [Playwright MCP server](https://github.com/microsoft/playwright-mcp) supports sessions for maintaining browser state across requests, but the [AI SDK doesn't yet support MCP session management](https://v5.ai-sdk.dev/docs/ai-sdk-core/tools-and-tool-calling#mcp-tools)
 - Future updates may add:
@@ -146,33 +144,17 @@ The application uses DigitalOcean Spaces (S3-compatible object storage) to optim
 
 2. **S3 Upload**: Base64 data is uploaded to S3 with the structure:
 
-   ```
+   ```bash
    /uploads/{uuid}/{original-filename}
    ```
 
 3. **URL Replacement**: Base64 data is replaced with presigned URLs that expire after 7 days
 
-4. **Supported Formats**: All file types are supported, including:
+4. **Supported Formats**: Most file types are supported, including:
    - Images (PNG, JPEG, GIF, WebP, SVG)
    - Videos (MP4, WebM)
    - Audio (MP3, WAV, OGG)
    - Documents (PDF, JSON, TXT, HTML, CSS, JS)
-
-### Performance Optimizations
-
-To prevent UI blocking during heavy operations:
-
-- **Concurrent Uploads**: Multiple files are uploaded in parallel using Promise.all
-- **Batching with Concurrency Limits**: Uploads are processed in batches of 3 to prevent overwhelming the system
-- **Non-blocking Operations**: All S3 uploads happen asynchronously without blocking the main thread
-
-### Supported File Types
-
-- **Images**: PNG, JPEG, GIF, WebP, SVG
-- **Videos**: MP4, WebM
-- **Audio**: MP3, WAV, OGG  
-- **Documents**: PDF, JSON, TXT, HTML, CSS, JS
-- **Binary**: Any other file type
 
 ### Performance Features
 
@@ -402,7 +384,7 @@ Click "Create Resources" to start the deployment. The initial build may take 10-
 
 #### Verify Services
 
-1. Check that all 3 components show as "Running"
+1. Check that all 3 components show as running and healthy
 2. Visit your app URL to see the homepage
 3. Test the Chat interface
 4. Test the Screenshotter tool
@@ -415,28 +397,6 @@ Use the App Platform metrics to monitor:
 - Request rates
 - Error logs
 
-#### Scaling
-
-For production use, consider:
-
-- Increasing instance sizes for better performance
-- Adding multiple instances for high availability
-- Setting up alerts for monitoring
-
-### Cost Estimation
-
-Monthly costs (approximate):
-
-- Web Service (Basic XXS): $5
-- Playwright Server (Professional XS): $20
-- Playwright MCP (Professional XS): $20
-- **Total**: ~$45/month
-
-Plus:
-
-- Gradient usage (pay per token)
-- Spaces storage and bandwidth
-
 ### Troubleshooting Deployment
 
 #### Build Failures
@@ -444,16 +404,10 @@ Plus:
 If the build fails:
 
 1. Check the build logs for errors
-2. Ensure all environment variables are set
+2. Ensure the correct values are in the arguments to the runners
 3. Verify the Dockerfiles are correct
 
 #### Runtime Errors
-
-If services won't start:
-
-1. Check runtime logs
-2. Verify internal networking is configured
-3. Ensure ports match the configuration
 
 #### Connection Issues
 
@@ -472,7 +426,7 @@ If services can't communicate:
 
 ## Project Structure
 
-```
+```text
 ├── app/
 │   ├── api/               # API routes
 │   │   ├── chat/         # Main chat endpoint
@@ -542,7 +496,7 @@ Run `yarn test:coverage` to see the full coverage report.
 
 2. **"Cannot connect to Playwright server"**
    - Ensure both Playwright containers are running
-   - Check ports 8080 and 8081 are not in use
+   - Check ports 8080 and 8081 are not in use (when running locally)
    - Verify environment variables are set correctly
 
 3. **"Gradient API error"**
@@ -556,7 +510,7 @@ Run `yarn test:coverage` to see the full coverage report.
    - Ensure bucket name is globally unique
 
 5. **"Screenshot timeout"**
-   - Some sites may block automated browsers
+   - Check Playwright server is running and reachable
    - Try different browser options
    - Check if the site requires authentication
 
@@ -568,7 +522,7 @@ The most common cause of "Bad Request" errors in the chat interface is incorrect
 
 The number of tokens a model generates is determined by:
 
-```
+```javascript
 generated_tokens = min(request.max_tokens, (model_context_length - prompt_token_length))
 ```
 
@@ -594,10 +548,6 @@ Where:
    - Check the model's documentation for its specific limit
    - Leave room for both input and output tokens
 
-4. **Best Practice**
-   - Use the default Max Tokens value unless you specifically need longer outputs
-   - For long conversations, consider starting a new chat to reset context
-
 ## Contributing
 
 Contributions are welcome! Please:
@@ -617,4 +567,4 @@ For issues specific to:
 
 ## License
 
-This is a demo application provided by DigitalOcean. See LICENSE for details.
+This is a template application provided by DigitalOcean. See LICENSE for details.
