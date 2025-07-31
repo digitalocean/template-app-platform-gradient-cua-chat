@@ -5,6 +5,22 @@
 
 import { JSONRPCMessage, JSONRPCResponse } from 'ai';
 
+// Type definitions for mock helpers
+interface ToolSchema {
+  type: string;
+  properties?: Record<string, unknown>;
+  required?: string[];
+  [key: string]: unknown;
+}
+
+interface MockTool {
+  description: string;
+  inputSchema: ToolSchema;
+  execute: jest.MockedFunction<(args: Record<string, unknown>) => Promise<{ success: boolean; [key: string]: unknown }>> | ((args: Record<string, unknown>) => Promise<{ success: boolean; [key: string]: unknown }>);
+}
+
+type JSONRPCResponseValue = Record<string, unknown> | string | number | boolean | null | Array<unknown>;
+
 /**
  * Prepares a JSON response for mocking
  */
@@ -83,7 +99,7 @@ export function prepareStreamResponse(chunks: string[]): ReadableStream<Uint8Arr
 /**
  * Creates a mock MCP transport for testing
  */
-export function createMockTransport(responses: Map<string, any> = new Map()) {
+export function createMockTransport(responses: Map<string, JSONRPCResponseValue> = new Map()) {
   const sentMessages: JSONRPCMessage[] = [];
   const handlers = {
     onmessage: undefined as ((message: JSONRPCMessage) => void) | undefined,
@@ -98,10 +114,11 @@ export function createMockTransport(responses: Map<string, any> = new Map()) {
         
         // Simulate response for specific methods
         if ('method' in message && responses.has(message.method) && 'id' in message && message.id !== undefined) {
+          const result = responses.get(message.method);
           const response: JSONRPCResponse = {
             jsonrpc: '2.0',
             id: message.id,
-            result: responses.get(message.method),
+            result: result || {},
           };
           
           // Simulate async response
@@ -134,11 +151,11 @@ export function createMockTransport(responses: Map<string, any> = new Map()) {
 /**
  * Creates a mock tool implementation for testing
  */
-export function createMockTool(name: string, schema: any, mockExecute?: (args: any) => any) {
+export function createMockTool(name: string, schema: ToolSchema, mockExecute?: (args: Record<string, unknown>) => Promise<{ success: boolean; [key: string]: unknown }>): MockTool {
   return {
     description: `Mock ${name} tool`,
     inputSchema: schema,
-    execute: mockExecute || jest.fn().mockResolvedValue({ success: true }),
+    execute: mockExecute || jest.fn().mockResolvedValue({ success: true }) as jest.MockedFunction<(args: Record<string, unknown>) => Promise<{ success: boolean; [key: string]: unknown }>>,
   };
 }
 
@@ -168,7 +185,7 @@ export async function streamToArray<T>(stream: ReadableStream<T>): Promise<T[]> 
 export function createMockRequest(options: {
   method?: string;
   headers?: Record<string, string | number>;
-  body?: any;
+  body?: Record<string, unknown>;
   url?: string;
 }) {
   const {
@@ -224,7 +241,7 @@ export async function flushPromises() {
  */
 export function createDeferred<T>() {
   let resolve: (value: T) => void;
-  let reject: (error: any) => void;
+  let reject: (error: Error) => void;
   
   const promise = new Promise<T>((res, rej) => {
     resolve = res;

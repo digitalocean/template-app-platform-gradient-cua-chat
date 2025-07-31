@@ -3,6 +3,18 @@
  */
 
 import { POST } from './route';
+
+// Type definitions for mock MCP client
+interface MockMCPClient {
+  tools: jest.MockedFunction<() => Promise<Record<string, MockTool>>>;
+  close: jest.MockedFunction<() => void>;
+}
+
+interface MockTool {
+  description: string;
+  inputSchema: { type: string; [key: string]: unknown };
+  execute: jest.MockedFunction<(args: Record<string, unknown>) => Promise<Record<string, unknown>>>;
+}
 import {
   createTextStream,
   createToolCallStream,
@@ -62,7 +74,7 @@ jest.mock('@/app/lib/s3-utils', () => ({
 }));
 
 describe('Chat API Route', () => {
-  let mockMCPClient: any;
+  let mockMCPClient: MockMCPClient;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -208,8 +220,8 @@ describe('Chat API Route', () => {
         processToolResultForBase64.mockReset();
 
         // Mock processing functions
-        processToolCallForBase64.mockImplementation((toolCall) => Promise.resolve(toolCall));
-        processToolResultForBase64.mockImplementation((result) => Promise.resolve({
+        processToolCallForBase64.mockImplementation((toolCall: { toolName: string; args: Record<string, unknown> }) => Promise.resolve(toolCall));
+        processToolResultForBase64.mockImplementation((result: Record<string, unknown>) => Promise.resolve({
           ...result,
           processed: true,
         }));
@@ -272,8 +284,8 @@ describe('Chat API Route', () => {
         const { processToolCallForBase64, processToolResultForBase64 } = require('@/app/lib/s3-utils');
 
         // Mock the S3 processing to convert base64 to URL
-        processToolCallForBase64.mockImplementation((toolCall) => Promise.resolve(toolCall));
-        processToolResultForBase64.mockImplementation((result) => {
+        processToolCallForBase64.mockImplementation((toolCall: { toolName: string; args: Record<string, unknown> }) => Promise.resolve(toolCall));
+        processToolResultForBase64.mockImplementation((result: Record<string, unknown>) => {
           if (result?.content?.[0]?.data === S3_FIXTURES.base64Image.small) {
             return Promise.resolve({
               content: [{
@@ -347,7 +359,11 @@ describe('Chat API Route', () => {
           { type: 'text', content: 'I will take a screenshot for you.' },
           {
             type: 'tool',
-            content: TOOL_FIXTURES.screenshot,
+            content: {
+              toolName: TOOL_FIXTURES.screenshot.name,
+              toolCallId: TOOL_FIXTURES.screenshot.callId,
+              args: TOOL_FIXTURES.screenshot.args,
+            },
           },
           { type: 'text', content: 'Screenshot captured successfully!' },
         ]);
@@ -379,10 +395,10 @@ describe('Chat API Route', () => {
       it('should handle MCP client initialization errors without race conditions', async () => {
         // This test ensures that onUncaughtError doesn't cause "Cannot access before initialization" errors
         const { experimental_createMCPClient } = require('ai');
-        const { StreamableHTTPClientTransport } = require('@modelcontextprotocol/sdk/client/streamableHttp.js');
+        // StreamableHTTPClientTransport is imported but not used directly in this test
         
         // Create a mock that simulates the actual implementation behavior
-        experimental_createMCPClient.mockImplementationOnce(async ({ transport, onUncaughtError }) => {
+        experimental_createMCPClient.mockImplementationOnce(async ({ onUncaughtError }: { transport: unknown; onUncaughtError?: (error: Error) => Promise<void> }) => {
           // Simulate an error occurring during initialization
           setTimeout(() => {
             if (onUncaughtError) {
@@ -424,7 +440,7 @@ describe('Chat API Route', () => {
         
         let capturedOnUncaughtError: ((error: Error) => Promise<void>) | undefined;
         
-        experimental_createMCPClient.mockImplementationOnce(async ({ onUncaughtError }) => {
+        experimental_createMCPClient.mockImplementationOnce(async ({ onUncaughtError }: { onUncaughtError?: (error: Error) => Promise<void> }) => {
           capturedOnUncaughtError = onUncaughtError;
           return mockClient;
         });
@@ -476,7 +492,10 @@ describe('Chat API Route', () => {
       it('should handle API errors with response bodies', async () => {
         const { streamText } = require('ai');
         streamText.mockImplementationOnce(() => {
-          const error: any = new Error('API Error');
+          const error = new Error('API Error') as Error & {
+          statusCode?: number;
+          responseBody?: string;
+        };
           error.statusCode = ERROR_FIXTURES.apiError.statusCode;
           error.responseBody = ERROR_FIXTURES.apiError.responseBody;
           throw error;

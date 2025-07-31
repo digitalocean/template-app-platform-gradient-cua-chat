@@ -5,6 +5,9 @@
 
 import { CoreMessage } from 'ai';
 
+// Type definitions for tool call arguments
+type ToolCallArguments = Record<string, unknown>;
+
 // Standard test prompts
 export const TEST_PROMPTS = {
   simple: 'Hello, how are you?',
@@ -30,7 +33,7 @@ export const TEST_MESSAGES = {
     content,
   }),
   
-  toolCallMessage: (toolName: string, toolCallId: string, args: any): CoreMessage => ({
+  toolCallMessage: (toolName: string, toolCallId: string, args: ToolCallArguments): CoreMessage => ({
     role: 'assistant',
     content: [
       {
@@ -42,7 +45,7 @@ export const TEST_MESSAGES = {
     ],
   }),
   
-  toolResultMessage: (toolCallId: string, toolName: string, result: any): CoreMessage => ({
+  toolResultMessage: (toolCallId: string, toolName: string, result: { type: 'content'; value: Array<{ type: 'text'; text: string } | { type: 'media'; data: string; mediaType: string }> }): CoreMessage => ({
     role: 'tool',
     content: [
       {
@@ -96,7 +99,7 @@ export const TOOL_FIXTURES = {
 export const STREAM_FIXTURES = {
   textChunks: ['Hello', ', ', 'this ', 'is ', 'a ', 'test ', 'response', '!'],
   
-  toolCallChunks: (toolName: string, toolCallId: string, args: any) => [
+  toolCallChunks: (toolName: string, toolCallId: string, args: ToolCallArguments) => [
     `9:{"toolCallId":"${toolCallId}","toolName":"${toolName}"}`,
     `a:"${toolCallId}":${JSON.stringify(args)}`,
     `b:"${toolCallId}"`,

@@ -5,10 +5,28 @@
 
 import { simulateReadableStream } from 'ai/test';
 
+// Type definitions for stream helpers
+type ToolCallArguments = Record<string, unknown>;
+type ToolResult = Record<string, unknown>;
+
+interface ToolContent {
+  toolName: string;
+  toolCallId: string;
+  args: ToolCallArguments;
+}
+
+type MultiPartContent = {
+  type: 'text';
+  content: string;
+} | {
+  type: 'tool';
+  content: ToolContent;
+};
+
 /**
  * Simulates a tool call streaming response
  */
-export function createToolCallStream(toolName: string, toolCallId: string, args: any) {
+export function createToolCallStream(toolName: string, toolCallId: string, args: ToolCallArguments) {
   const chunks = [
     `9:{"toolCallId":"${toolCallId}","toolName":"${toolName}"}\n`,
     `a:"${toolCallId}":${JSON.stringify(args)}\n`,
@@ -73,7 +91,7 @@ export function createInteractiveToolStream(
  */
 export function createToolResultStream(
   toolCallId: string,
-  result: any,
+  result: ToolResult,
   isError: boolean = false
 ) {
   const chunks = isError
@@ -98,7 +116,7 @@ export function createToolResultStream(
 /**
  * Creates a complete message with multiple parts for testing
  */
-export function createMultiPartStream(parts: Array<{ type: 'text' | 'tool', content: any }>) {
+export function createMultiPartStream(parts: MultiPartContent[]) {
   const chunks: string[] = [];
 
   parts.forEach((part) => {

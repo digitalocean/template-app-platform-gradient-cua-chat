@@ -5,6 +5,15 @@
 
 import { UIMessage } from 'ai';
 
+// Type for tool part that may not perfectly match UI types
+interface ToolMessagePart {
+  type: 'tool';
+  toolCallId: string;
+  toolName: string;
+  args: Record<string, unknown>;
+  state: string;
+}
+
 // Real user message structure
 export const REAL_USER_MESSAGE: UIMessage = {
   parts: [
@@ -44,7 +53,7 @@ export const REAL_ASSISTANT_TOOL_MESSAGE: UIMessage = {
         filename: 'screenshot.png'
       },
       state: 'partial-call'
-    } as any
+    } as ToolMessagePart
   ],
   id: 'msg_456',
   role: 'assistant'

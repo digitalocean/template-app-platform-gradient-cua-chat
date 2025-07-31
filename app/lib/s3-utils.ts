@@ -14,17 +14,64 @@ import crypto from 'crypto';
  * where filename is either provided or generated based on MIME type
  */
 
+/**
+ * Validate required environment variables for S3 configuration
+ */
+function validateS3Environment(): {
+  endpoint: string;
+  region: string;
+  accessKeyId: string;
+  secretAccessKey: string;
+  bucketName: string;
+} {
+  const missingVars: string[] = [];
+  
+  const accessKeyId = process.env.DO_SPACES_ACCESS_KEY;
+  const secretAccessKey = process.env.DO_SPACES_SECRET_KEY;
+  const bucketName = process.env.DO_SPACES_BUCKET;
+  
+  if (!accessKeyId) {
+    missingVars.push('DO_SPACES_ACCESS_KEY');
+  }
+  
+  if (!secretAccessKey) {
+    missingVars.push('DO_SPACES_SECRET_KEY');
+  }
+  
+  if (!bucketName) {
+    missingVars.push('DO_SPACES_BUCKET');
+  }
+  
+  if (missingVars.length > 0) {
+    throw new Error(
+      `Missing required environment variables for S3 configuration: ${missingVars.join(', ')}. ` +
+      'Please ensure these variables are set in your environment.'
+    );
+  }
+  
+  return {
+    endpoint: process.env.DO_SPACES_ENDPOINT || 'https://nyc3.digitaloceanspaces.com',
+    region: process.env.DO_SPACES_REGION || 'nyc3',
+    accessKeyId: accessKeyId as string,
+    secretAccessKey: secretAccessKey as string,
+    bucketName: bucketName as string,
+  };
+}
+
+// Validate environment variables before initializing S3 client
+const s3Config = validateS3Environment();
+
 // Initialize S3 client with DigitalOcean Spaces configuration
 const s3Client = new S3Client({
-  endpoint: process.env.DO_SPACES_ENDPOINT || 'https://nyc3.digitaloceanspaces.com',
-  region: process.env.DO_SPACES_REGION || 'nyc3',
+  endpoint: s3Config.endpoint,
+  region: s3Config.region,
   credentials: {
-    accessKeyId: process.env.DO_SPACES_ACCESS_KEY || '',
-    secretAccessKey: process.env.DO_SPACES_SECRET_KEY || '',
+    accessKeyId: s3Config.accessKeyId,
+    secretAccessKey: s3Config.secretAccessKey,
   },
 });
 
-const BUCKET_NAME = process.env.DO_SPACES_BUCKET || '';
+const BUCKET_NAME = s3Config.bucketName;
 const MAX_CONCURRENT_UPLOADS = 10; // Limit concurrent uploads to prevent overwhelming the system
 
 /**
