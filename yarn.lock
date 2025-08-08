@@ -15,6 +15,14 @@
     "@ai-sdk/provider" "2.0.0-beta.1"
     "@ai-sdk/provider-utils" "3.0.0-beta.7"
 
+"@ai-sdk/gateway@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/gateway/-/gateway-1.0.4.tgz#e8e0da84a98d9ad5ee0c72adc6951a8db37d90e6"
+  integrity sha512-1roLdgMbFU3Nr4MC97/te7w6OqxsWBkDUkpbCcvxF3jz/ku91WVaJldn/PKU8feMKNyI5W9wnqhbjb1BqbExOQ==
+  dependencies:
+    "@ai-sdk/provider" "2.0.0"
+    "@ai-sdk/provider-utils" "3.0.1"
+
 "@ai-sdk/openai-compatible@^1.0.0-beta.10":
   version "1.0.0-beta.10"
   resolved "https://registry.yarnpkg.com/@ai-sdk/openai-compatible/-/openai-compatible-1.0.0-beta.10.tgz#0d204561894c63f5901da6c9423f96afdc4ac287"
@@ -49,6 +57,23 @@
     "@ai-sdk/provider" "2.0.0-canary.14"
     "@standard-schema/spec" "^1.0.0"
     zod-to-json-schema "^3.24.1"
+
+"@ai-sdk/provider-utils@3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/provider-utils/-/provider-utils-3.0.1.tgz#f1c229506420c3eaa60df15c9fc9a15b0b75d516"
+  integrity sha512-/iP1sKc6UdJgGH98OCly7sWJKv+J9G47PnTjIj40IJMUQKwDrUMyf7zOOfRtPwSuNifYhSoJQ4s1WltI65gJ/g==
+  dependencies:
+    "@ai-sdk/provider" "2.0.0"
+    "@standard-schema/spec" "^1.0.0"
+    eventsource-parser "^3.0.3"
+    zod-to-json-schema "^3.24.1"
+
+"@ai-sdk/provider@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/provider/-/provider-2.0.0.tgz#b853c739d523b33675bc74b6c506b2c690bc602b"
+  integrity sha512-6o7Y2SeO9vFKB8lArHXehNuusnpddKPk7xqL7T2/b+OvXMRIXUO1rR4wcv1hAFUAT9avGZshty3Wlua/XA7TvA==
+  dependencies:
+    json-schema "^0.4.0"
 
 "@ai-sdk/provider@2.0.0-beta.1":
   version "2.0.0-beta.1"
@@ -3222,7 +3247,7 @@ agent-base@^7.1.0, agent-base@^7.1.2:
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-7.1.4.tgz#e3cd76d4c548ee895d3c3fd8dc1f6c5b9032e7a8"
   integrity sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==
 
-ai@5.0.0-beta.29, ai@^5.0.0-beta.29:
+ai@5.0.0-beta.29:
   version "5.0.0-beta.29"
   resolved "https://registry.yarnpkg.com/ai/-/ai-5.0.0-beta.29.tgz#8355a967a5c61c57d202c4abf5bf9ca220557604"
   integrity sha512-v4qMxh4diGxZ1hfo5Lc7rDbEQj8zicCZGMQr8imGHLWjmm/pMFYFKp9JQSR5+kXXyXqpE2RtMWYomAm7LmHMDA==
@@ -3239,6 +3264,16 @@ ai@5.0.0-canary.24:
   dependencies:
     "@ai-sdk/provider" "2.0.0-canary.14"
     "@ai-sdk/provider-utils" "3.0.0-canary.19"
+    "@opentelemetry/api" "1.9.0"
+
+ai@^5.0.8:
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/ai/-/ai-5.0.8.tgz#2158b98f881a445f3df19f87fcafb41d04219394"
+  integrity sha512-qbnhj046UvG30V1S5WhjBn+RBGEAmi8PSZWqMhRsE3EPxvO5BcePXTZFA23e9MYyWS9zr4Vm8Mv3wQXwLmtIBw==
+  dependencies:
+    "@ai-sdk/gateway" "1.0.4"
+    "@ai-sdk/provider" "2.0.0"
+    "@ai-sdk/provider-utils" "3.0.1"
     "@opentelemetry/api" "1.9.0"
 
 ajv-formats@^2.1.1:
