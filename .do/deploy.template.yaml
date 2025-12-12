@@ -66,8 +66,7 @@ spec:
           value: http://playwright-mcp:8080/mcp
       git:
         branch: main
-        deploy_on_push: true
-        repo: https://github.com/digitalocean/template-app-platform-gradient-cua-chat.git
+        repo_clone_url: https://github.com/digitalocean/template-app-platform-gradient-cua-chat.git
       http_port: 8080
       instance_count: 1
       instance_size_slug: apps-d-2vcpu-8gb
@@ -81,8 +80,7 @@ spec:
           value: 0.0.32
       git:
         branch: main
-        deploy_on_push: true
-        repo: https://github.com/digitalocean/template-app-platform-gradient-cua-chat.git
+        repo_clone_url: https://github.com/digitalocean/template-app-platform-gradient-cua-chat.git
       http_port: 8080
       instance_count: 1
       instance_size_slug: apps-d-2vcpu-8gb
@@ -94,8 +92,7 @@ spec:
           value: 1.54.1
       git:
         branch: main
-        deploy_on_push: true
-        repo: https://github.com/digitalocean/template-app-platform-gradient-cua-chat.git
+        repo_clone_url: https://github.com/digitalocean/template-app-platform-gradient-cua-chat.git
       http_port: 8081
       instance_count: 1
       instance_size_slug: apps-d-2vcpu-8gb
