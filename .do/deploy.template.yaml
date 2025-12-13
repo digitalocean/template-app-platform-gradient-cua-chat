@@ -69,7 +69,7 @@ spec:
         repo_clone_url: https://github.com/digitalocean/template-app-platform-gradient-cua-chat.git
       http_port: 8080
       instance_count: 1
-      instance_size_slug: apps-d-2vcpu-8gb
+      instance_size_slug: apps-s-1vcpu-1gb
       name: web
       run_command: yarn start
       source_dir: /
@@ -83,7 +83,7 @@ spec:
         repo_clone_url: https://github.com/digitalocean/template-app-platform-gradient-cua-chat.git
       http_port: 8080
       instance_count: 1
-      instance_size_slug: apps-d-2vcpu-8gb
+      instance_size_slug: apps-s-1vcpu-1gb
       name: playwright-mcp
     - dockerfile_path: Dockerfile.playwright
       envs:
