@@ -43,7 +43,7 @@ export default function ScreenshotterPage() {
   const [fullPage, setFullPage] = useState(false);
   const [highQuality, setHighQuality] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ error?: string; details?: string; code?: string } | null>(null);
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [showLightbox, setShowLightbox] = useState(false);
 
@@ -71,7 +71,7 @@ export default function ScreenshotterPage() {
 
   const handleScreenshot = async () => {
     if (!url) {
-      setError("Please enter a URL");
+      setError({ error: "Please enter a URL" });
       return;
     }
 
@@ -79,7 +79,7 @@ export default function ScreenshotterPage() {
     try {
       new URL(url);
     } catch {
-      setError("Please enter a valid URL");
+      setError({ error: "Please enter a valid URL" });
       return;
     }
 
@@ -109,15 +109,19 @@ export default function ScreenshotterPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Failed to take screenshot");
+        throw data;
       }
 
       const data = await response.json();
       setScreenshot(data.screenshot);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unexpected error occurred"
-      );
+      if (err && typeof err === 'object' && 'error' in err) {
+        setError(err as { error?: string; details?: string; code?: string });
+      } else if (err instanceof Error) {
+        setError({ error: err.message });
+      } else {
+        setError({ error: "An unexpected error occurred" });
+      }
     } finally {
       setLoading(false);
     }
@@ -189,36 +193,20 @@ export default function ScreenshotterPage() {
                 </button>
               </div>
               {error && (
-                <div className="mt-2">
-                  {(() => {
-                    // Check if the error contains JSON
-                    try {
-                      // Try to parse as JSON first
-                      const parsed = JSON.parse(error);
-                      return (
-                        <pre className="bg-gray-900 text-gray-100 rounded p-3 overflow-x-auto text-xs">
-                          <code>{JSON.stringify(parsed, null, 2)}</code>
-                        </pre>
-                      );
-                    } catch {
-                      // If not JSON, check if it looks like a code/technical error
-                      if (
-                        error.includes("{") ||
-                        error.includes("Error:") ||
-                        error.length > 100
-                      ) {
-                        return (
-                          <pre className="bg-gray-900 text-gray-100 rounded p-3 overflow-x-auto text-xs">
-                            <code>{error}</code>
-                          </pre>
-                        );
-                      }
-                      // Otherwise, display as regular text
-                      return (
-                        <div className="text-sm text-red-600">{error}</div>
-                      );
-                    }
-                  })()}
+                <div className="mt-2 bg-red-50 border border-red-200 rounded-lg p-3">
+                  <div className="text-sm text-red-700">
+                    <div>{error.error || "Failed to take screenshot"}</div>
+                    {error.details && (
+                      <div className="mt-2">
+                        <strong>Details:</strong> {error.details}
+                      </div>
+                    )}
+                    {error.code && (
+                      <div className="mt-1">
+                        <strong>Error Code:</strong> {error.code}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
