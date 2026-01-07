@@ -1734,7 +1734,7 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@modelcontextprotocol/sdk@^1.16.0", "@modelcontextprotocol/sdk@^1.17.0":
+"@modelcontextprotocol/sdk@^1.17.0":
   version "1.17.0"
   resolved "https://registry.npmjs.org/@modelcontextprotocol/sdk/-/sdk-1.17.0.tgz"
   integrity sha512-qFfbWFA7r1Sd8D697L7GkTd36yqDuTkvz0KfOGkgXR8EUhQn3/EDNIR/qUdQNMT8IjmasBvHWuXeisxtXTQT2g==
@@ -1854,20 +1854,13 @@
   resolved "https://registry.npmjs.org/@pkgr/core/-/core-0.2.9.tgz"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@playwright/mcp@^0.0.32":
-  version "0.0.32"
-  resolved "https://registry.npmjs.org/@playwright/mcp/-/mcp-0.0.32.tgz"
-  integrity sha512-1pEULH5zF+NuUCBGRDEei7+Qv1pbkscaR0z3fKjAp7CsrS1DAgu62DHwCSbkTulXkd5nY1TdCCr4oK+shCB7Eg==
+"@playwright/mcp@^0.0.40":
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/@playwright/mcp/-/mcp-0.0.40.tgz#316a017bc59f5e813286d508d38952e6571cd37c"
+  integrity sha512-gkaE0enMiRLKU3UdVZP2vUn9/rkLT01susE4XY7K10Wpl9vgOXeDCoTNwA2z82D8S2MX31lHx+uveEU4nHF3yw==
   dependencies:
-    "@modelcontextprotocol/sdk" "^1.16.0"
-    commander "^13.1.0"
-    debug "^4.4.1"
-    dotenv "^17.2.0"
-    mime "^4.0.7"
-    playwright "1.55.0-alpha-1752701791000"
-    playwright-core "1.55.0-alpha-1752701791000"
-    ws "^8.18.1"
-    zod-to-json-schema "^3.24.4"
+    playwright "1.56.0-alpha-1758750661000"
+    playwright-core "1.56.0-alpha-1758750661000"
 
 "@rtsao/scc@^1.1.0":
   version "1.1.0"
@@ -3876,11 +3869,6 @@ comma-separated-tokens@^2.0.0:
   resolved "https://registry.npmjs.org/comma-separated-tokens/-/comma-separated-tokens-2.0.3.tgz"
   integrity sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==
 
-commander@^13.1.0:
-  version "13.1.0"
-  resolved "https://registry.npmjs.org/commander/-/commander-13.1.0.tgz"
-  integrity sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==
-
 commander@^14.0.0:
   version "14.0.0"
   resolved "https://registry.npmjs.org/commander/-/commander-14.0.0.tgz"
@@ -4125,11 +4113,6 @@ dom-accessibility-api@^0.6.3:
   version "0.6.3"
   resolved "https://registry.npmjs.org/dom-accessibility-api/-/dom-accessibility-api-0.6.3.tgz"
   integrity sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w==
-
-dotenv@^17.2.0:
-  version "17.2.1"
-  resolved "https://registry.npmjs.org/dotenv/-/dotenv-17.2.1.tgz"
-  integrity sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==
 
 dots-wrapper@^3.12.1:
   version "3.12.2"
@@ -7034,11 +7017,6 @@ mime-types@^3.0.0, mime-types@^3.0.1:
   dependencies:
     mime-db "^1.54.0"
 
-mime@^4.0.7:
-  version "4.0.7"
-  resolved "https://registry.npmjs.org/mime/-/mime-4.0.7.tgz"
-  integrity sha512-2OfDPL+e03E0LrXaGYOtTFIYhiuzep94NSsuhrNULq+stylcJedcHdzHtz0atMUuGwJfFYs0YL5xeC/Ca2x0eQ==
-
 mimic-fn@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/mimic-fn/-/mimic-fn-2.1.0.tgz"
@@ -7462,10 +7440,10 @@ playwright-core@1.54.1:
   resolved "https://registry.npmjs.org/playwright-core/-/playwright-core-1.54.1.tgz"
   integrity sha512-Nbjs2zjj0htNhzgiy5wu+3w09YetDx5pkrpI/kZotDlDUaYk0HVA5xrBVPdow4SAUIlhgKcJeJg4GRKW6xHusA==
 
-playwright-core@1.55.0-alpha-1752701791000:
-  version "1.55.0-alpha-1752701791000"
-  resolved "https://registry.npmjs.org/playwright-core/-/playwright-core-1.55.0-alpha-1752701791000.tgz"
-  integrity sha512-mQhzhjJMiqnGNnYZv7M4yk1OcNTt1E72jrTLO7EqZuoeat4+qpcU0/mbK+RcTEass5a9YheoVFh6OIhruFMGVg==
+playwright-core@1.56.0-alpha-1758750661000:
+  version "1.56.0-alpha-1758750661000"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.56.0-alpha-1758750661000.tgz#8aba5d17949f7de8c682468089dd9d8ae2c9208a"
+  integrity sha512-ivP4xjc6EHkUqF80pMFfDRijKLEvO64qC6DTgyYrbsyCo8gugkqwKm6lFWn4W47g4S8juoUwQhlRVjM2BJ+ruA==
 
 playwright@1.54.1:
   version "1.54.1"
@@ -7476,12 +7454,12 @@ playwright@1.54.1:
   optionalDependencies:
     fsevents "2.3.2"
 
-playwright@1.55.0-alpha-1752701791000:
-  version "1.55.0-alpha-1752701791000"
-  resolved "https://registry.npmjs.org/playwright/-/playwright-1.55.0-alpha-1752701791000.tgz"
-  integrity sha512-PA3TvDz7uQ+Pde0uaii5/WpU5vntRJsYFsaSPoBzywIqzYFO1ugk1ZZ0q6z4/xHq0ha1UClvsv3P77B+u1fi+w==
+playwright@1.56.0-alpha-1758750661000:
+  version "1.56.0-alpha-1758750661000"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.56.0-alpha-1758750661000.tgz#c5a4fa45adc3d8abe8890ab0e42846c3032f37c6"
+  integrity sha512-15C/m7NPpAmBX2MFMrepCMj18ksBYvhbT90cvFjG2iBs2YPqO2U4f9OjcX207ITSmDAAJ8pWBlJutcZUYUERXg==
   dependencies:
-    playwright-core "1.55.0-alpha-1752701791000"
+    playwright-core "1.56.0-alpha-1758750661000"
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -9066,7 +9044,7 @@ write-file-atomic@^5.0.1:
     imurmurhash "^0.1.4"
     signal-exit "^4.0.1"
 
-ws@^8.18.0, ws@^8.18.1:
+ws@^8.18.0:
   version "8.18.3"
   resolved "https://registry.npmjs.org/ws/-/ws-8.18.3.tgz"
   integrity sha512-PEIGCY5tSlUt50cqyMXfCzX+oOPqN0vuGqWzbcJ2xvnkzkq46oOpz7dQaTDBdfICb4N14+GARUDw2XV2N4tvzg==
@@ -9134,7 +9112,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zod-to-json-schema@^3.24.1, zod-to-json-schema@^3.24.4:
+zod-to-json-schema@^3.24.1:
   version "3.24.6"
   resolved "https://registry.npmjs.org/zod-to-json-schema/-/zod-to-json-schema-3.24.6.tgz"
   integrity sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==
